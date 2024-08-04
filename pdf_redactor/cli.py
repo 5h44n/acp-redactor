@@ -1,6 +1,8 @@
 import click
 from .redactor import Redactor
 import os
+import pymupdf
+
 
 @click.command()
 @click.argument('input_file', type=click.Path(exists=True))
