@@ -1,22 +1,22 @@
 import click
 from .redactor import Redactor
 import os
-import pymupdf
 
 
 @click.command()
-@click.argument('input_file', type=click.Path(exists=True))
-@click.option('--redact', '-r', multiple=True, help='Text to redact. Can be used multiple times.')
+@click.argument('file', type=click.Path(exists=True))
+@click.option('--attorney', '-a', help='Attorney email address.')
+@click.option('--client', '-c', help='Client email address.')
 @click.option('--output', '-o', help='Output file name. If not provided, a default name will be generated.')
-def main(input_file, redact, output):
+def main(file, attorney, client, output):
     """Redact specified text from a PDF file."""
-    if not redact:
-        click.echo("No text specified for redaction. Use --redact option.")
+    if not attorney or not client:
+        click.echo("Please provide both attorney and client email addresses.")
         return
 
-    click.echo(f"Redacting {len(redact)} text item(s) from {input_file}")
+    click.echo(f"Redacting conversations between attorney:{attorney} and client:{client}  from {file}\n")
     
-    redactor = Redactor(input_file, list(redact))
+    redactor = Redactor(file, attorney=attorney, client=client)
     output_file = redactor.redact()
     
     if output:

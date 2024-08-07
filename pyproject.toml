@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-pymupdf = "^1.24.9"
+pymupdf = "1.23.26"
 tqdm = "^4.66.4"
 click = "^8.1.7"
 
