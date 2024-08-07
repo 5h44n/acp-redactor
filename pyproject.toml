@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pdf-redactor"
+name = "acp-redactor"
 version = "0.1.0"
 description = ""
 authors = ["Shaan Savarirayan <shaan.savarirayan@gmail.com>"]
@@ -13,7 +13,7 @@ click = "^8.1.7"
 
 
 [tool.poetry.scripts]
-pdf-redactor = "pdf_redactor.cli:main"
+acp-redactor = "acp_redactor.cli:main"
 
 [build-system]
 requires = ["poetry-core"]
