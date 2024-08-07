@@ -1,5 +1,7 @@
 import fitz  # PyMuPDF
 
+import os
+
 class Redactor:
     def __init__(self, input_file, attorney, client):
         self.input_file = input_file
@@ -29,6 +31,8 @@ class Redactor:
         output_file = f"{self.input_file.rsplit('.', 1)[0]}_redacted.pdf"
         cleaned_doc.save(output_file, garbage=4, deflate=True)
         cleaned_doc.close()
+
+        os.remove(cleaned_file)
 
         return output_file
     
