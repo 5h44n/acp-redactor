@@ -1,7 +1,6 @@
 import click
-from .redactor import Redactor
 import os
-
+from .redactor import Redactor
 
 @click.command()
 @click.argument('file', type=click.Path(exists=True))
@@ -14,11 +13,17 @@ def main(file, attorney, client, output):
         click.echo("Please provide both attorney and client email addresses.")
         return
 
-    click.echo(f"Redacting conversations between attorney:{attorney} and client:{client}  from {file}\n")
-    
+    click.echo(f"Redacting conversations between attorney:{attorney} and client:{client} from {file}\n")
+
     redactor = Redactor(file, attorney=attorney, client=client)
-    output_file = redactor.redact()
-    
+
+    try:
+        output_file = redactor.redact()
+    except KeyboardInterrupt:
+        click.echo("Operation interrupted. Cleaning up...")
+        redactor.close()
+        return
+
     if output:
         os.rename(output_file, output)
         output_file = output

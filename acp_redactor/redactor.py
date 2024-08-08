@@ -77,6 +77,7 @@ class Redactor:
             from_line = next((line for line in email_info_texts if "From:" in line), None)
             to_line = next((line for line in email_info_texts if "To:" in line), None)
             cc_line = next((line for line in email_info_texts if "Cc:" in line), None)
+            subject_line = next((line for line in email_info_texts if "Subject:" in line), None)
 
             if from_line and to_line and self._is_valid_email_exchange(from_line, to_line, cc_line):
                 redact_start = max(bbox.y1 for _, _, bbox in group)
@@ -86,6 +87,7 @@ class Redactor:
                 else:
                     redact_end = page.rect.height
                 self._redact_area(page, redact_start, redact_end)
+                print(f"Redacted email exchange!\n{subject_line}\n{from_line}\n{to_line}\n{cc_line if cc_line else 'CC: n/a'}\n\n")
 
     def _find_line_bbox(self, page, line):
         """Find the bounding box of a line in the page."""
@@ -105,12 +107,9 @@ class Redactor:
 
         result = all(email in emails for email in all_emails) and (self.attorney in all_emails and self.client in all_emails)
 
-        print(f"Emails: {all_emails} - {result}")
-
         return result
 
     def _redact_area(self, page, redact_start, redact_end):
         """Redact a rectangular area from y0 to y1 on the page."""
         rect = fitz.Rect(0, redact_start, page.rect.width, redact_end)
-        print(f"Redacting area: {rect}")
         page.add_redact_annot(rect, fill=(0, 0, 0))
